@@ -1,0 +1,85 @@
+#Read in MASS, reshape2, and ggplot2 packages
+
+library(MASS)
+library(reshape2)
+library(ggplot2)
+
+#Read in harmonics
+
+data <- read.table("./0.harmonics_info.txt", header=TRUE)
+
+#Remove NAs (be careful, substituting the dataframe with itself!)
+
+data <- subset(data, species != "NA")
+
+#LDA performed by species
+
+lda_spe <- lda(species~A1+A2+A3+A4+A5+A6+A7+A8+A9+A10+A11+A12+A13+A14+A15+A16+A17+A18+A19+A20+B1+B2+B3+B4+B5+B6+B7+B8+B9+B10+B11+B12+B13+B14+B15+B16+B17+B18+B19+B20+C1+C2+C3+C4+C5+C6+C7+C8+C9+C10+C11+C12+C13+C14+C15+C16+C17+C18+C19+C20+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10+D11+D12+D13+D14+D15+D16+D17+D18+D19+D20, data=data, CV=TRUE)
+
+#Create a dataframe with actual and predicted species
+
+actual_spe <- as.data.frame(data$species)
+predicted_spe <- as.data.frame(lda_spe$class)
+spe_predict <- cbind(actual_spe, predicted_spe)
+colnames(spe_predict) <- c("actual_spe", "predicted_spe")
+
+#Create a table with actual vs. predicted species
+
+t_spe_predict <- table(spe_predict)
+
+#Transform the table into proportions and use the melt function to reformat into a plottable format
+
+p_spe_predict <- prop.table(t_spe_predict, 1)
+m_spe_predict <- melt(p_spe_predict, id="actual_spe")
+
+m_spe_predict$actual_spe <- factor(m_spe_predict$actual_spe, levels=c("coriacea","misera","biflora","capsularis","micropetala","organensis","pohlii","rubra","tricuspis","caerulea","cincinnata","edmundoi","gibertii","hatschbachii","kermesina","mollissima","setacea","suberosa","tenuifila","amethystina","foetida","gracilis","morifolia","actinia","miersii","sidifolia","triloba","alata","edulis","ligularis","nitida","racemosa","villosa","coccinea","cristalina","galbana","malacophylla","maliformis","miniata","mucronata"))
+
+m_spe_predict$predicted_spe <- factor(m_spe_predict$predicted_spe, levels=c("coriacea","misera","biflora","capsularis","micropetala","organensis","pohlii","rubra","tricuspis","caerulea","cincinnata","edmundoi","gibertii","hatschbachii","kermesina","mollissima","setacea","suberosa","tenuifila","amethystina","foetida","gracilis","morifolia","actinia","miersii","sidifolia","triloba","alata","edulis","ligularis","nitida","racemosa","villosa","coccinea","cristalina","galbana","malacophylla","maliformis","miniata","mucronata"))
+
+#Plot out a confusion matrix
+
+p <- ggplot(m_spe_predict, aes(predicted_spe, actual_spe, fill=value))
+p + geom_tile() + theme(axis.text.x=element_text(angle=90, hjust=1, vjust=0.5)) + scale_fill_gradient(low="white", high="black", limits=c(0,1)) + geom_vline(xintercept=c(2.5,9.5,19.5,23.5,27.5,33.5)) + geom_hline(yintercept=c(2.5,9.5,19.5,23.5,27.5,33.5))+ coord_fixed()
+
+#LDA performed by heteroblasty
+
+#Read in harmonics
+
+data <- read.table("./2.harmonics_info.txt", header=TRUE)
+
+#Remove NAs (be careful, substituting the dataframe with itself!)
+
+data <- subset(data, species != "NA")
+
+#Only look at first 10 nodes, as almost all plants have at least this many leaves
+
+sub10 <- subset(data, heteroblasty<11)
+sub10$heteroblasty <- as.factor(sub10$heteroblasty)
+
+#LDA performed by heteroblasty
+
+lda_hetero <- lda(heteroblasty~A1+A2+A3+A4+A5+A6+A7+A8+A9+A10+A11+A12+A13+A14+A15+A16+A17+A18+A19+A20+B1+B2+B3+B4+B5+B6+B7+B8+B9+B10+B11+B12+B13+B14+B15+B16+B17+B18+B19+B20+C1+C2+C3+C4+C5+C6+C7+C8+C9+C10+C11+C12+C13+C14+C15+C16+C17+C18+C19+C20+D1+D2+D3+D4+D5+D6+D7+D8+D9+D10+D11+D12+D13+D14+D15+D16+D17+D18+D19+D20, data=sub10, CV=TRUE)
+
+#Create a dataframe with actual and predicted heteroblastic node
+
+actual_het <- as.data.frame(sub10$heteroblasty)
+predicted_het <- as.data.frame(lda_hetero$class)
+hetero_predict <- cbind(actual_het, predicted_het)
+colnames(hetero_predict) <- c("actual_het", "predicted_het")
+
+#Create a table with actual vs. predicted species
+
+t_hetero_predict <- table(hetero_predict)
+
+#Transform the table into proportions and use the melt function to reformat into a plottable format
+
+p_hetero_predict <- prop.table(t_hetero_predict, 1)
+m_hetero_predict <- melt(p_hetero_predict, id="actual_het")
+
+#Plot out a confusion matrix
+
+p <- ggplot(m_hetero_predict, aes(predicted_het, actual_het, fill=value))
+p + geom_tile() + theme(axis.text.x=element_text(angle=90, hjust=1, vjust=0.5)) + scale_fill_gradient(low="white", high="black", limits=c(0,1)) + theme_bw()+ coord_fixed()
+
+
+

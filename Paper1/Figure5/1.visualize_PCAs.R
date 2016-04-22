@@ -1,0 +1,37 @@
+#Read in ggplot2
+library(ggplot2)
+
+#Read in data
+data <- read.table("./0.classes_and_heteroblasty.txt", header=TRUE)
+
+#Visualize landmark PCA by species class
+
+p <- ggplot(data=data, aes(land_pc1, land_pc2, colour=class))
+p + geom_point(size=3, alpha=0.6) + theme_bw() + scale_colour_brewer(type="qual", palette=2)
+
+p <- ggplot(data=data, aes(land_pc3, land_pc4, colour=class))
+p + geom_point(size=3, alpha=0.6) + theme_bw() + scale_colour_brewer(type="qual", palette=2)
+
+#Visualize landmark PCA by heteroblasty
+
+p <- ggplot(data=data, aes(land_pc1, land_pc2, colour=cont_hetero))
+p + geom_point(size=3, alpha=0.6) + theme_bw() + scale_colour_gradient2(low="black",mid="dodgerblue",high="yellow", midpoint=6.5)
+
+p <- ggplot(data=data, aes(land_pc3, land_pc4, colour=cont_hetero))
+p + geom_point(size=3, alpha=0.6) + theme_bw() + scale_colour_gradient2(low="black",mid="dodgerblue",high="yellow", midpoint=6.5)
+
+#Visualize Elliptical Fourier Descriptor PCA by species class
+
+p <- ggplot(data, aes(efd_pc1, efd_pc2, colour=class))
+p + geom_point(size=3, alpha=0.6) + theme_bw() + scale_colour_brewer(type="qual", palette=2)
+
+p <- ggplot(data, aes(efd_pc3, efd_pc4, colour=class))
+p + geom_point(size=3, alpha=0.6) + theme_bw() + scale_colour_brewer(type="qual", palette=2)
+
+#Visualize Elliptical Fourier Descriptor PCA by heteroblasty
+
+p <- ggplot(data=data, aes(efd_pc1, efd_pc2, colour=cont_hetero))
+p + geom_point(size=3, alpha=0.6) + theme_bw()  + scale_colour_gradient2(low="black",mid="dodgerblue",high="yellow", midpoint=6.5)
+
+p <- ggplot(data=data, aes(efd_pc3, efd_pc4, colour=cont_hetero))
+p + geom_point(size=3, alpha=0.6) + theme_bw()  + scale_colour_gradient2(low="black",mid="dodgerblue",high="yellow", midpoint=6.5)
