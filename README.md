@@ -9,9 +9,9 @@ This repository contains the data and code used to produce figures for two manus
 
 There will be two papers. The tentative titles are:
 
-**Paper 1:** Morphometric analysis of Passiflora leaves I: the relationship between landmarks of the vasculature and elliptical Fourier descriptors of the blade]
+**Paper 1:** Morphometric analysis of Passiflora leaves I: the relationship between landmarks of the vasculature and elliptical Fourier descriptors of the blade
 
-**Paper 2:** Morphometric analysis of Passiflora leaves II: divergent heteroblastic trajectories underly the disparate leaf shapes in Passiflora
+**Paper 2:** Morphometric analysis of Passiflora leaves II: divergent heteroblastic trajectories underlie the disparate leaf shapes in Passiflora
 
 *Check back as things progress for updates!*
 
